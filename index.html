@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Enhanced Test Paper Generator</title>
+    
+</head>
+
+<body>
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <button class="popup-close">&times;</button>
+            <h2 class="popup-title">Welcome to Test Generator</h2>
+            <img src="img/BookCover.png" alt="Welcome" class="welcome-image">
+            <ul class="instruction-list">
+                <li>Select chapters you want to include in the test.</li>
+                <li>Select mode as you want.</li>
+                <li>Choose questions from different types (MCQ, Fill in blanks, etc.).</li>
+                <li>Set marks for each question as needed.</li>
+                <li>Preview and customize the test paper layout.</li>
+                <li>Take a print or save as PDF for later editing.</li>
+                <!-- <li>जिन अध्यायों को आप परीक्षा में शामिल करना चाहते हैं, उनका चयन करें।</li>
+                <li>अपनी आवश्यकता के अनुसार मोड चुनें।</li>
+                <li>विभिन्न प्रकार के प्रश्नों जैसे– बहुविकल्पीय प्रश्न, रिक्त स्थान भरें, मिलान करें आदि में से प्रश्न चुनें।</li>
+                <li>प्रत्येक प्रश्न के लिए आवश्यकतानुसार अंक निर्धारित करें।</li>
+                <li>परीक्षा पत्र के प्रारूप का पूर्वावलोकन करें।</li>
+                <li>प्रिंट कर लें अथवा बाद में संपादन के लिए पीडीएफ के रूप में सहेजें।</li> -->
+            </ul>
+            <small style="display: block; text-align: center; margin-top: 20px; color: var(--secondary);">
+                Click anywhere outside or press the close button to start
+            </small>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="progress-indicator">
+            <div class="step" data-step="1">1</div>
+            <div class="step" data-step="2">2</div>
+            <div class="step" data-step="3">3</div>
+        </div>
+
+        <div id="chapter-selection" class="screen">
+            <h2>Choose Lessons</h2>
+            <button type="button" id="select-all-lessons-btn" class="secondary-btn" onclick="toggleAllLessons()">Select All</button>
+            <div id="chapter-list"></div>
+            <!-- <button onclick="showQuestions()">Proceed</button> -->
+            <div id="load-draft-bar" style="display:none;margin-top:18px;text-align:center;">
+                <button id="load-draft-btn" onclick="loadDraft()" style="
+                    background:linear-gradient(135deg,#dc2626,#6c3483);
+                    color:#fff;border:none;padding:11px 28px;border-radius:8px;
+                    cursor:pointer;font-weight:700;font-size:1em;letter-spacing:0.5px;
+                    box-shadow:0 3px 10px rgba(142,68,173,0.35);
+                    display:inline-flex;align-items:center;gap:8px;
+                ">📋 Load Last Draft</button>
+                <div style="font-size:0.82em;color:#888;margin-top:6px;" id="draft-info-label"></div>
+            </div>
+        </div>
+
+        <div id="mode-selection" class="screen">
+            <h2>Select Mode</h2>
+            <div class="mode-container" style="display: flex; justify-content: center; gap: 20px;">
+                <div class="mode-card" onclick="selectMode('auto')" style="cursor: pointer; padding: 20px; border: 2px solid var(--secondary); border-radius: 10px; width: 200px; text-align: center;">
+                    <h3>Auto Mode</h3>
+                    <p>Automatically select questions with customizable marks</p>
+                </div>
+                <div class="mode-card" onclick="selectMode('manual')" style="cursor: pointer; padding: 20px; border: 2px solid var(--secondary); border-radius: 10px; width: 200px; text-align: center;">
+                    <h3>Manual Mode</h3>
+                    <p>Manually select questions from each category</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="auto-mode" class="screen">
+            <h2>Select Questions</h2>
+            <div id="auto-question-config"></div>
+            <button onclick="generateAutoQuestions()" class="generate-btn">Generate Questions</button>
+        </div>
+
+        <div id="question-selection" class="screen">
+            <h2>Select Questions</h2>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+            <select id="question-type" class="question-type-select" onchange="filterQuestions();updateSelectAllCategoryBtn();" style="margin-bottom:0;">
+                <option value="mcq">Multiple Choice Questions</option>
+                <option value="tick">Tick the Correct Answers</option>
+                <option value="fillblanks">Fill in the Blanks</option>
+                <option value="truefalse">True or False</option>
+                <option value="matching">Match the Following</option>
+                <option value="vshort">Very Short Answer Questions</option>
+                <option value="short">Short Answer Questions</option>
+                <option value="long">Long Answer Questions</option>
+                <option value="ar">Assertion-Reason Questions</option>
+                <option value="case">Case-based Questions</option>
+                <option value="numericals">Numerical Questions</option>
+                <option value="picturebased">Picture-based Questions</option>
+                <option value="grammar">Grammar-based Questions</option>
+                <option value="circleodd">Circle/Underline/Odd</option>
+                <option value="rewrite">Rewrite the Sentences</option>
+                <option value="miscellaneous">Miscellaneous</option>
+            </select>
+            <button id="select-all-category-btn" type="button" onclick="selectAllCurrentCategory()" style="
+                background:linear-gradient(135deg,#27ae60,#1e8449);
+                color:#fff;border:none;padding:8px 18px;border-radius:7px;
+                cursor:pointer;font-weight:700;font-size:0.9em;letter-spacing:0.3px;
+                box-shadow:0 2px 8px rgba(39,174,96,0.25);white-space:nowrap;
+                flex-shrink:0;
+            ">☑ Select All</button>
+            </div>
+            <div id="question-list"></div>
+            <button onclick="generateManualQuestions()" class="generate-btn" style="display: block; margin: 20px auto;">Generate Test</button>
+        </div>
+
+        <div id="test-preview" class="screen">
+            <div class="header-box">
+                <div class="logo-upload">
+                    <label>Logo: (width should be in 400px)
+                        <input type="file" id="logo-upload" accept="image/*" onchange="previewLogo(event)">
+                    </label>
+                    <img id="logo-preview" class="logo-preview" style="display: none;">
+                </div>
+                <div class="student-info">
+                    <label>Student Name: <input type="text" id="student-name" readonly placeholder="For Student"></label>
+                    <label>Roll Number: <input type="text" id="roll-number" readonly placeholder="For Student"></label>
+                    <label>Class & Section: <input type="text" id="class-name" placeholder="For Teacher"></label>
+                    <label>Examination: <input type="text" id="exam-name" placeholder="For Teacher"></label>
+                    <label>Duration (Minutes): <input type="number" id="test-time" placeholder="For Teacher"></label>
+                    <label>Total Marks: <input type="number" id="total-marks" readonly placeholder="For Teacher"></label>
+                    <label>Date: <input type="date" id="test-date"></label>
+                </div>
+            </div>
+            <button onclick="showFinalPreview()" class="no-print">Preview</button>
+        </div>
+
+        <!-- Add new preview popup -->
+        <div class="preview-popup">
+            <div class="preview-content">
+                <div id="final-preview-content"></div>
+                <div class="preview-actions">
+                    <div id="preview-live-total" style="
+                        display:inline-flex;
+                        align-items:center;
+                        background:linear-gradient(135deg,#1a7a4a,#27ae60);
+                        color:#fff;
+                        font-size:1.05em;
+                        font-weight:700;
+                        padding:8px 20px;
+                        border-radius:8px;
+                        letter-spacing:0.5px;
+                        box-shadow:0 2px 8px rgba(39,174,96,0.25);
+                        margin-right:12px;
+                    ">Total Marks: 0</div>
+                    <button onclick="printPreview(false)">Print Without Answers</button>
+                    <button onclick="printPreview(true)" style="margin-left:8px;">Print With Answers</button>
+                    <button onclick="openAddQuestionModal()" style="margin-left:8px;background:#e67e22;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;">➕ Add Your Question</button>
+                    <button onclick="saveAsDoc()" style="margin-left:8px;background:#2980b9;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;">📝 Save as Doc</button>
+                    <button onclick="saveDraft()" style="margin-left:8px;background:#8e44ad;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;">💾 Save Draft</button>
+                    <button onclick="closeFinalPreview()">Close Preview</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="edit-modal">
+            <div class="modal-card">
+                <h3 id="edit-modal-title">Edit Question</h3>
+                <label id="edit-question-label" style="font-weight:600;display:block;margin-bottom:6px;font-size:0.9em;color:#555;">Question Text</label>
+                <textarea id="edit-question-text" placeholder="Edit the question text here..."></textarea>
+                <div id="edit-options-wrapper" style="display:none;margin-top:14px;">
+                    <label style="font-weight:600;display:block;margin-bottom:8px;">Options (MCQ) — <span style="color:#27ae60;font-size:0.85em;">🟢 Select correct answer</span></label>
+                    <div class="edit-option-row">
+                        <input type="radio" name="edit-mcq-correct" id="edit-mcq-radio-0" value="0" style="margin-right:6px;accent-color:#27ae60;" onchange="_updateMcqRadioHighlights()">
+                        <span class="edit-option-label">A)</span>
+                        <input type="text" id="edit-q-opt-0" class="edit-option-input" placeholder="Option A">
+                    </div>
+                    <div class="edit-option-row">
+                        <input type="radio" name="edit-mcq-correct" id="edit-mcq-radio-1" value="1" style="margin-right:6px;accent-color:#27ae60;" onchange="_updateMcqRadioHighlights()">
+                        <span class="edit-option-label">B)</span>
+                        <input type="text" id="edit-q-opt-1" class="edit-option-input" placeholder="Option B">
+                    </div>
+                    <div class="edit-option-row">
+                        <input type="radio" name="edit-mcq-correct" id="edit-mcq-radio-2" value="2" style="margin-right:6px;accent-color:#27ae60;" onchange="_updateMcqRadioHighlights()">
+                        <span class="edit-option-label">C)</span>
+                        <input type="text" id="edit-q-opt-2" class="edit-option-input" placeholder="Option C">
+                    </div>
+                    <div class="edit-option-row">
+                        <input type="radio" name="edit-mcq-correct" id="edit-mcq-radio-3" value="3" style="margin-right:6px;accent-color:#27ae60;" onchange="_updateMcqRadioHighlights()">
+                        <span class="edit-option-label">D)</span>
+                        <input type="text" id="edit-q-opt-3" class="edit-option-input" placeholder="Option D">
+                    </div>
+                    <div style="margin-top:6px;font-size:0.82em;color:#888;">☝ Radio button next to each option marks it as the correct answer.</div>
+                </div>
+
+                <div id="edit-matching-wrapper" style="display:none;margin-top:14px;">
+                    <label style="font-weight:600;display:block;margin-bottom:8px;">Match the Following</label>
+                    <div style="display:flex;gap:10px;margin-bottom:12px;">
+                        <input id="edit-matching-col-a" placeholder="Column A" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;">
+                        <input id="edit-matching-col-b" placeholder="Column B" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;">
+                    </div>
+                    <div id="edit-matching-rows"></div>
+                    <button type="button" onclick="_addEditMatchingRow()" style="margin-top:10px;padding:8px 14px;border:none;border-radius:6px;background:#3498db;color:#fff;cursor:pointer;">+ Add Row</button>
+                </div>
+
+                <div id="edit-image-wrapper" style="display:none;margin-top:14px;">
+                    <label style="font-weight:600;display:block;margin-bottom:8px;">Replace Image</label>
+                    <div id="edit-img-drop" style="border:2px dashed #3498db;border-radius:8px;padding:18px;text-align:center;cursor:pointer;background:#f0f8ff;position:relative;">
+                        <input type="file" id="edit-img-input" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" onchange="_handleEditImageUpload(event)">
+                        <div id="edit-img-placeholder" style="pointer-events:none;color:#3498db;">
+                            <div style="font-size:2em;margin-bottom:6px;">🖼</div>
+                            <div style="font-weight:600;">Click or drag an image here</div>
+                            <div style="font-size:0.82em;color:#888;margin-top:4px;">PNG, JPG, GIF supported</div>
+                        </div>
+                        <img id="edit-img-preview" src="" alt="Preview" style="display:none;max-width:100%;max-height:200px;border-radius:6px;margin-top:8px;pointer-events:none;">
+                    </div>
+                    <div id="edit-img-remove-row" style="display:none;margin-top:8px;text-align:right;">
+                        <button type="button" onclick="_clearEditImage()" style="font-size:0.85em;padding:4px 10px;border:1px solid #e74c3c;color:#e74c3c;background:#fff;border-radius:6px;cursor:pointer;">✕ Remove Image</button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="edit-question-key">
+                <input type="hidden" id="edit-question-type">
+
+                <!-- Answer / Correct Answer field — shown for all question types -->
+                <div id="edit-answer-wrapper" style="margin-top:16px;padding-top:14px;border-top:1px solid #e8e8e8;">
+                    <label style="font-weight:600;display:block;margin-bottom:6px;font-size:0.9em;color:#555;">
+                        ✅ Answer / Correct Answer
+                        <span id="edit-answer-hint" style="font-weight:400;color:#888;font-size:0.88em;margin-left:6px;">(shown when "Print with Answers" is used)</span>
+                    </label>
+                    <textarea id="edit-answer-text" placeholder="Enter the correct answer here..." style="width:100%;min-height:52px;padding:8px 10px;border:1px solid #b2dfb0;border-radius:6px;box-sizing:border-box;resize:vertical;font-size:0.95em;background:#f6fff6;"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" onclick="saveEditedQuestion()">Save</button>
+                    <button type="button" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="replace-modal">
+            <div class="modal-card rp-modal-card">
+                <div class="rp-header">
+                    <span>Replace Question</span>
+                    <button class="rp-close-x" onclick="closeReplaceModal()">&#10005;</button>
+                </div>
+                <div id="replace-list" class="replace-list rp-list"></div>
+                <div class="rp-footer">
+                    <button id="rp-use-btn" class="rp-use-btn">✔ Use Selected</button>
+                    <button class="rp-cancel-btn" onclick="closeReplaceModal()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <button onclick="previousStep()" class="back-button" id="prevButton" style="display: none;">Previous</button>
+            <button onclick="nextStep()" id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <!-- Floating Help Button -->
+    <button id="help-btn" class="help-btn" title="Show Help">?</button>
+
+    <!-- Add Your Question Modal -->
+    <div class="modal-overlay" id="add-q-modal">
+        <div class="modal-card" style="max-width:520px;width:95%;">
+            <h3 style="margin-top:0;">➕ Add Your Own Question</h3>
+
+            <label style="font-weight:600;display:block;margin-bottom:4px;">Question Type</label>
+            <select id="add-q-type" onchange="_renderAddQuestionOptions()" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;margin-bottom:14px;">
+                <option value="mcq">Multiple Choice Questions</option>
+                <option value="fillblanks">Fill in the Blanks</option>
+                <option value="truefalse">True or False</option>
+                <option value="vshort">Very Short Answer Questions</option>
+                <option value="short">Short Answer Questions</option>
+                <option value="long">Long Answer Questions</option>
+                <option value="matching">Match the Following</option>
+                <option value="ar">Assertion-Reason Questions</option>
+                <!-- <option value="case">Case-based Questions</option>  -->              
+                <option value="picturebased">Picture-based Questions</option>
+                <option value="grammar">Grammar-based Questions</option>
+            </select>
+
+            <label style="font-weight:600;display:block;margin-bottom:4px;">Question Text</label>
+            <textarea id="add-q-text" placeholder="Type your question here..." style="width:100%;min-height:80px;padding:8px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;margin-bottom:14px;resize:vertical;"></textarea>
+
+            <div id="add-q-options-area" style="margin-bottom:14px;"></div>
+
+            <div style="display:flex;gap:16px;margin-bottom:14px;">
+                <div style="flex:1;">
+                    <label style="font-weight:600;display:block;margin-bottom:4px;">Marks</label>
+                    <input type="number" id="add-q-marks" value="1" min="1" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;">
+                </div>
+                <div style="flex:2;">
+                    <label style="font-weight:600;display:block;margin-bottom:4px;">Answer (optional, for answer key)</label>
+                    <input type="text" id="add-q-answer" placeholder="Correct answer" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;">
+                </div>
+            </div>
+
+            <div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;">
+                <button type="button" onclick="saveCustomQuestion()" style="background:#27ae60;color:#fff;border:none;padding:9px 22px;border-radius:6px;cursor:pointer;font-weight:600;">Save Question</button>
+                <button type="button" onclick="closeAddQuestionModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* ── Final Preview action buttons (right-side column) ─── */
+        .fp-btn {
+            padding: 5px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: opacity .15s, transform .1s;
+            width: 100%;
+            text-align: center;
+        }
+        .fp-btn:hover { opacity: .85; transform: scale(1.03); }
+        .fp-btn:active { transform: scale(0.97); }
+        .fp-edit    { background: #3498db; color: #fff; }
+        .fp-replace { background: #8e44ad; color: #fff; }
+        .fp-remove  { background: #e74c3c; color: #fff; }
+
+        /* Separator line between question content and button column */
+        .fp-question-inner {
+            border-left: 3px solid transparent;
+            border-radius: 4px;
+            padding: 2px 0;
+        }
+        .fp-question-inner:hover .fp-btn-col {
+            opacity: 1;
+        }
+        .fp-btn-col {
+            opacity: 0.45;
+            transition: opacity .2s;
+        }
+        .fp-btn-col:hover { opacity: 1; }
+
+        /* ── Sub-item action buttons (per क/ख/ग row) ─── */
+        .sub-item-btn {
+            padding: 3px 9px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.68em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: opacity .15s, transform .1s;
+            width: 100%;
+            text-align: center;
+            opacity: 0.5;
+            margin: 0px;
+        }
+        .sub-item-btn:hover { opacity: 1; transform: scale(1.04); }
+        .sub-item-btn:active { transform: scale(0.97); }
+        .sub-item-edit    { background: #3498db; color: #fff; }
+        .sub-item-replace { background: #8e44ad; color: #fff; }
+        .sub-item-remove  { background: #e74c3c; color: #fff; }
+        .sub-item-row:hover .sub-item-actions .sub-item-btn { opacity: 1; }
+
+        /* ── Replace Modal — scrollable list layout ──────── */
+        .rp-modal-card {
+            max-width: 500px;
+            width: 95%;
+            padding: 0 !important;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+        }
+        .rp-header {
+            background: #3d8fd4;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 13px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .rp-close-x {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 2px;
+            opacity: 0.85;
+        }
+        .rp-close-x:hover { opacity: 1; }
+
+        .rp-list {
+            overflow-y: auto;
+            flex: 1;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Each question row */
+        .rp-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .rp-row:hover:not(.rp-row--used) { background: #f0f7ff; }
+        .rp-row--selected { background: #e8f4fd; }
+        .rp-row--used { cursor: default; opacity: 0.55; background: #fafafa; }
+
+        .rp-row-num {
+            font-weight: 700;
+            font-size: 0.9em;
+            color: #555;
+            min-width: 24px;
+            padding-top: 2px;
+            flex-shrink: 0;
+        }
+        .rp-row-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .rp-row-label {
+            font-weight: 700;
+            font-size: 0.78em;
+            color: #3d8fd4;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            margin-bottom: 4px;
+        }
+        .rp-row-text {
+            font-size: 0.93em;
+            color: #222;
+            line-height: 1.55;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .rp-choices {
+            margin-top: 10px;
+            margin-left: 12px;
+            padding-left: 4px;
+            border-left: 3px solid rgba(61, 143, 212, 0.2);
+        }
+        .rp-choice-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #2c3e50;
+        }
+        .rp-choice {
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .edit-option-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .edit-option-label {
+            width: 24px;
+            font-weight: 700;
+        }
+        .edit-option-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95em;
+            width: 100%;
+        }
+        .rp-row-used-tag {
+            margin-top: 5px;
+            font-size: 0.75em;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .rp-row-check {
+            flex-shrink: 0;
+            padding-top: 3px;
+        }
+        .rp-radio {
+            width: 18px;
+            height: 18px;
+            accent-color: #3d8fd4;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .rp-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-shrink: 0;
+            background: #fafafa;
+        }
+        .rp-use-btn {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background .15s;
+        }
+        .rp-use-btn:hover { background: #219a52; }
+        .rp-cancel-btn {
+            background: #fff;
+            color: #555;
+            border: 1px solid #ccc;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .rp-cancel-btn:hover { background: #f5f5f5; }
+
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+
+    <script src="js/questions.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="js/download.js"></script>
+
+    <!-- <script>
+        /////////////////Licence Check - Do not remove or modify this section //////////////////
+        const _0x18446d=_0x2abe;function _0x13c1(){const _0x60a66a=['5380550sZSsIL','v\x20style=\x22d','ans-serif;','x;justify-','\x20\x20\x20\x20\x20\x20\x20<p>','</div>','t-family:s','align:cent',':100vh;fon','yle=\x22text-','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20','isplay:fle','-items:cen','avBHu','stener','653102fEezEh','load','1>\x0a\x20\x20\x20\x20\x20\x20\x20','content:ce','9ptuoZT','nter;align','d.</p>\x0a\x20\x20\x20','iv>\x0a\x20\x20\x20\x20\x20\x20','\x20\x20\x20<div\x20st','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20','er;\x22>\x0a\x20\x20\x20\x20','<h1>Access','6200mScDLp','1707voGcgE','ter;height','1889232jgIUwN','\x20Denied</h','License\x20fi','\x20\x20\x20\x20\x20\x20\x20</d','addEventLi','le\x20missing','5qcXuMa','14542770KSGkqg','729992DmwykK','innerHTML','body','\x20\x20\x20\x20\x20\x20\x20<di','RmKZA','\x20or\x20blocke','5179184vPJKhf','\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','ssing','License\x20Mi'];_0x13c1=function(){return _0x60a66a;};return _0x13c1();}(function(_0x32db64,_0x412d07){const _0x1aa48d=_0x2abe,_0x13e3c0=_0x32db64();while(!![]){try{const _0x54299a=parseInt(_0x1aa48d(0x1ef))/(0x79*-0x1f+0x59*-0x59+0x2d99*0x1)+parseInt(_0x1aa48d(0x208))/(-0x51b+0x29a+0x283)+-parseInt(_0x1aa48d(0x215))/(-0x167*0x18+0x3a*0x4+0x1*0x20c3)*(parseInt(_0x1aa48d(0x214))/(0x5f9+-0x9*-0x126+-0x104b))+parseInt(_0x1aa48d(0x1ed))/(0x432*-0x6+0xe35+0xafc)*(parseInt(_0x1aa48d(0x217))/(-0x12a2+0x539*-0x1+0x17e1*0x1))+parseInt(_0x1aa48d(0x1f9))/(0x7*-0x4b5+0x3*-0x679+-0x1*-0x3465)+parseInt(_0x1aa48d(0x1f5))/(-0x9*0x2f7+0x1*-0x65+0x1b1c)+-parseInt(_0x1aa48d(0x20c))/(-0x117e+0x679+0xb0e)*(parseInt(_0x1aa48d(0x1ee))/(0x1*-0x1c34+0x15f1*-0x1+0x322f));if(_0x54299a===_0x412d07)break;else _0x13e3c0['push'](_0x13e3c0['shift']());}catch(_0x5bc980){_0x13e3c0['push'](_0x13e3c0['shift']());}}}(_0x13c1,0xcc216+0x8e195+-0xec107*0x1));function _0x2abe(_0x39fc14,_0x434b2a){_0x39fc14=_0x39fc14-(0x18ab+-0x16b0+-0x1*0x13);const _0x26ed97=_0x13c1();let _0x5e5be4=_0x26ed97[_0x39fc14];return _0x5e5be4;}let licenseLoaded=![];function markLicenseLoaded(){licenseLoaded=!![];}window[_0x18446d(0x1eb)+_0x18446d(0x207)](_0x18446d(0x209),function(){const _0x31cc78=_0x18446d,_0x3c9c50={'RmKZA':_0x31cc78(0x1f8)+_0x31cc78(0x1f7),'avBHu':function(_0x43bc9c,_0x1d35b9,_0xc08766){return _0x43bc9c(_0x1d35b9,_0xc08766);}};_0x3c9c50[_0x31cc78(0x206)](setTimeout,()=>{const _0x211e88=_0x31cc78;if(!licenseLoaded){document[_0x211e88(0x1f1)][_0x211e88(0x1f0)]=_0x211e88(0x211)+_0x211e88(0x1f2)+_0x211e88(0x1fa)+_0x211e88(0x204)+_0x211e88(0x1fc)+_0x211e88(0x20b)+_0x211e88(0x20d)+_0x211e88(0x205)+_0x211e88(0x216)+_0x211e88(0x201)+_0x211e88(0x1ff)+_0x211e88(0x1fb)+_0x211e88(0x203)+_0x211e88(0x1f6)+_0x211e88(0x210)+_0x211e88(0x202)+_0x211e88(0x200)+_0x211e88(0x212)+_0x211e88(0x1f6)+_0x211e88(0x1f6)+_0x211e88(0x213)+_0x211e88(0x1e8)+_0x211e88(0x20a)+_0x211e88(0x1f6)+_0x211e88(0x1fd)+_0x211e88(0x1e9)+_0x211e88(0x1ec)+_0x211e88(0x1f4)+_0x211e88(0x20e)+_0x211e88(0x1f6)+_0x211e88(0x1ea)+_0x211e88(0x20f)+_0x211e88(0x1f6)+_0x211e88(0x1fe);throw new Error(_0x3c9c50[_0x211e88(0x1f3)]);}},-0x2c3*-0x1+0xb9*-0x29+0x1c0a);});
+    </script>
+    <script src="../../js/license.js"></script> -->
+</body>
+
+</html>
