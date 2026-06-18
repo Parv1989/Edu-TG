@@ -8,6 +8,10 @@ let customQuestions = {}; // key => { type, text, marks, options, answer, imageD
 let customQuestionCounter = 0;
 let _editImageData = ''; // temporary base64 image data for edit modal
 
+// Default blank line shown whenever a question's text ("question" field) is empty,
+// so the printed paper still has a writing line for the student instead of nothing.
+const DEFAULT_BLANK_LINE = '_'.repeat(77);
+
 const QUESTION_TYPE_OPTIONS = [
     { value: 'mcq', label: 'Multiple Choice Questions' },
     { value: 'tick', label: 'Tick the Correct Answers' },
@@ -1613,14 +1617,20 @@ function formatGroupedBlock(type, block, chapter, blockIdx, selectedItemIndices,
     const instruction = getEditedGroupedInstruction(type, chapter, blockIdx, block, questionKeys);
     const defaultLines = type === 'long' ? 4 : ['short','circleodd','rewrite','miscellaneous'].includes(type) ? 3 : type === 'grammar' ? 2 : 1;
 
-    let html = `<div style="margin-bottom:16px;">
-        <div style="margin-bottom:6px;">
-            ${mainLabel(mainNum)} ${instruction}
-        </div>`;
-
     // if there is just one selected item and its question is empty, we don't
     // render a secondary line with empty text – the instruction already covers it.
     const singleEmpty = itemsToRender.length === 1 && !(itemsToRender[0].item && itemsToRender[0].item.question);
+
+    // question blank ho (singleEmpty) to instruction ke samne hi marks badge dikhao,
+    // kyunki is case mein koi alag sub-item row render nahi hota jahan marks dikhe.
+    const instructionMarksHtml = singleEmpty
+        ? `<span class="marks-right" style="float:right;color:#555;font-size:0.85em;">[${totalMarks} marks]</span>`
+        : '';
+
+    let html = `<div style="margin-bottom:16px;">
+        <div style="margin-bottom:6px;">
+            ${mainLabel(mainNum)} ${instruction}${instructionMarksHtml}
+        </div>`;
 
     const blockSubCount = isSubItems ? (block.items || []).length : (block.questions || []).length;
     const isMulti = itemsToRender.length > 1 || (questionKeys && questionKeys.length > 1) || blockSubCount > 1;
@@ -1643,7 +1653,7 @@ function formatGroupedBlock(type, block, chapter, blockIdx, selectedItemIndices,
                 }
             }
         } else {
-            /* html += Array(defaultLines).fill('<div style="border-bottom:1px solid #ccc;margin:5px 32px 0;height:16px;"></div>').join(''); */
+            html += `<div style="margin:4px 0 8px 16px;">${DEFAULT_BLANK_LINE}</div>`;
         }
     } else {
         itemsToRender.forEach(({ item, itemIdx }, localIdx) => {
@@ -1654,7 +1664,7 @@ function formatGroupedBlock(type, block, chapter, blockIdx, selectedItemIndices,
             const answer = (edItem && edItem.answer !== undefined && edItem.answer !== '')
                 ? edItem.answer
                 : (item.answer || '');
-            const itemQ = item.question || '';
+            const itemQ = item.question || DEFAULT_BLANK_LINE;
             let safeQ = getEditedSubItemBodyHtml(key, itemQ, isMulti, localIdx === 0);
 
             const itemMarks = selectedQuestionsData[key] || 0;
@@ -1922,7 +1932,7 @@ function saveAsDoc() {
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset="utf-8">
-            <title>Test Paper</title>
+            <title></title>
             <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>90</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
             <style>
                 @page Section1 { margin:1.0in 1.0in 1.0in 1.0in; mso-header-margin:.5in; mso-footer-margin:.5in; mso-paper-source:0; }
@@ -1945,7 +1955,7 @@ function saveAsDoc() {
         <body><div class="Section1">`;
 
     if (logoData) content += `<div class="header"><img src="${logoData}" style="max-width:200px;"></div>`;
-    content += `<div class="header"><h2>${document.getElementById('exam-name').value || 'Test Paper'}</h2></div>`;
+    content += `<div class="header"><h2>${document.getElementById('exam-name').value || ''}</h2></div>`;
     content += `<table class="info-table">
         <tr>
             <td width="50%">Student Name: ${document.getElementById('student-name').value || '_________________'}</td>
@@ -2156,7 +2166,7 @@ function showFinalPreview() {
     let headerContent = `
         ${logoData ? `<div style="text-align:center;margin-bottom:20px;"><img src="${logoData}" style="max-width:200px;"></div>` : ''}
         <div style="text-align:center;margin-bottom:20px;">
-            <h2>${document.getElementById('exam-name').value || 'Test Paper'}</h2>
+            <h2>${document.getElementById('exam-name').value || ''}</h2>
         </div>
         <table style="width:100%;margin-bottom:20px;border-collapse:collapse;">
             <tr>

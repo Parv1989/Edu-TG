@@ -66,7 +66,7 @@ const questions = {
                 "items": [
                     {
                         "question": "",
-                        "answer": "Answers will vary."
+                        "answer": "Do it Yourself."
                     }
                 ]
             }
@@ -214,10 +214,10 @@ const questions = {
         ],
         "short": [
             {
-                "instruction": "Think of any one person who works to help your family.<br>For example, the cook, the driver, the gardener<br>Write the name of the person here. _______________<br>Make a sentence to tell what he/she does to help your family.<br>___________________________________________________________<br>What would you say to thank this person?<br>For example, for the driver you could say:<br>Thank you for driving me to school.<br>Thank you for bringing me back home.<br>Write your thank-you sentence here.<br>___________________________________________________________",
+                "instruction": "Think of any one person who works to help your family.",
                 "items": [
                     {
-                        "question": "",
+                        "question": "For example, the cook, the driver, the gardener<br>Write the name of the person here. _______________<br>Make a sentence to tell what he/she does to help your family.<br>___________________________________________________________<br>What would you say to thank this person?<br>For example, for the driver you could say:<br>Thank you for driving me to school.<br>Thank you for bringing me back home.<br>Write your thank-you sentence here.<br>___________________________________________________________",
                         "answer": "Answers will vary."
                     }
                 ]
@@ -512,10 +512,10 @@ const questions = {
         ],
         "picturebased": [
             {
-                "instruction": "In the word search, find the names of eight people and things we see in a school.<br><img src='img/ch-3-1.png'><br>Write the naming words you found in the word search.<br>1. __________&emsp;&emsp;2. __________<br>3. __________&emsp;&emsp;4. __________<br>5. __________&emsp;&emsp;6. __________<br>7. __________&emsp;&emsp;8. __________",
+                "instruction": "In the word search, find the names of eight people and things we see in a school.<br><img src='img/ch-3-1.png'>",
                 "items": [
                     {
-                        "question": "",
+                        "question": "Write the naming words you found in the word search.<br>1. __________&emsp;&emsp;2. __________<br>3. __________&emsp;&emsp;4. __________<br>5. __________&emsp;&emsp;6. __________<br>7. __________&emsp;&emsp;8. __________",
                         "answer": "<img src='img/ch-3-1-ans.png'><br>1. teacher 2. chair 3. book 4. boy 5. girl 6. principal 7. crayon 8. pencil"
                     }
                 ]
@@ -663,6 +663,14 @@ const questions = {
                     {
                         "question": "Blackie runs after squirrels.",
                         "answer": "Naming words:- Blackie, squirrels<br>Doing words:- runs"
+                    }
+                ]
+            },{
+                "instruction": "Write the -ing and -ed form of these action words.",
+                "items": [
+                    {
+                        "question": "<img src='img/ch-4-4.png'>",
+                        "answer": "<img src='img/ch-4-4-ans.png'>"
                     }
                 ]
             },
@@ -1277,7 +1285,7 @@ const questions = {
             }
         ]
     },
-    "10. Comprehension": {
+    "10. Comprehension-A Vacation": {
         "tick": [
             {
                 "instruction": "A VACATION<br>Ann, Fred and their parents have come to spend a few days with their friends, Mr and Mrs Guha and their son, Vicky.<br>Look at the picture carefully and answer the questions.<br><img src='img/ch-10-1.png'><br>Look at the picture again. Circle the correct words.",
@@ -1299,75 +1307,22 @@ const questions = {
                         "answer": "wonderful"
                     }
                 ]
-            },
-            {
-                "instruction": "Tick the correct answers.",
-                "items": [
-                    {
-                        "question": "Two/Three/Four things on the tree made it look colourful and pretty.",
-                        "answer": "Three"
-                    },
-                    {
-                        "question": "There was a tasty square/round/iced chocolate cake.",
-                        "answer": "square"
-                    },
-                    {
-                        "question": "Who is ‘I’ in the poem?<br>&emsp; a. airplane &emsp;&emsp; b. sky",
-                        "answer": "a"
-                    },
-                    {
-                        "question": "Can the little airplane fly?<br>&emsp; a. Yes &emsp;&emsp; b. No",
-                        "answer": "a"
-                    }
-                ]
             }
         ],
         "short": [
             {
-                "instruction": "Write the names of any four objects you see in the picture.<br>1. _________________ &emsp;&emsp; 3. _________________<br>2. _________________ &emsp;&emsp; 4. _________________",
-                "items": [
-                    {
-                        "question": "",
-                        "answer": "House, Bags, Car and Trees"
-                    }
-                ]
-            },
-            {
-                "instruction": "From the poem, find and write four words that rhyme with the word lay.<br>_____________________________________________________________________________",
+                "instruction": "From the poem, find and write four words that rhyme with the word lay.",
                 "items": [
                     {
                         "question": "",
                         "answer": "say, may, way and day"
                     }
                 ]
-            },
-            {
-                "instruction": "Write a polite word that is not mentioned in the poem..<br>_____________________________________________________________________________",
-                "items": [
-                    {
-                        "question": "",
-                        "answer": "Excuse me"
-                    }
-                ]
-            },
-            {
-                "instruction": "Which words in the story mean the same as the following?",
-                "items": [
-                    {
-                        "question": "made of many colours _______________________",
-                        "answer": "colourful"
-                    },
-                    {
-                        "question": "tasty _______________________",
-                        "answer": "delicious"
-                    },
-                    {
-                        "question": "liked _______________________",
-                        "answer": "pretty/beautiful"
-                    }
-                ]
             }
         ],
+            
+    },
+    "10. Comprehension-Please, Thank You And Pardon Me": {
         "fillblanks": [
             {
                 "instruction": "Fill in the blanks with the correct words.",
@@ -1395,6 +1350,29 @@ const questions = {
                 ]
             }
         ],
+        "short": [
+            {
+                "instruction": "From the poem, find and write four words that rhyme with the word lay.",
+                "items": [
+                    {
+                        "question": "",
+                        "answer": "say, may, way and day"
+                    }
+                ]
+            },
+            {
+                "instruction": "Write a polite word that is not mentioned in the poem..",
+                "items": [
+                    {
+                        "question": "",
+                        "answer": "Excuse me"
+                    }
+                ]
+            }
+        ],
+            
+    },
+    "10. Comprehension-Blue Fairy’s Birthday Party": {
         "truefalse": [
             {
                 "instruction": "Write T for true or F for false.",
@@ -1421,7 +1399,59 @@ const questions = {
                     }
                 ]
             }
-        ]
+        ],
+        "tick": [
+            {
+                "instruction": "Tick the correct answers.",
+                "items": [
+                    {
+                        "question": "Two/Three/Four things on the tree made it look colourful and pretty.",
+                        "answer": "Three"
+                    },
+                    {
+                        "question": "There was a tasty square/round/iced chocolate cake.",
+                        "answer": "square"
+                    }
+                ]
+            }
+        ],
+        "short": [
+            {
+                "instruction": "Which words in the story mean the same as the following?",
+                "items": [
+                    {
+                        "question": "made of many colours _______________________",
+                        "answer": "colourful"
+                    },
+                    {
+                        "question": "tasty _______________________",
+                        "answer": "delicious"
+                    },
+                    {
+                        "question": "liked _______________________",
+                        "answer": "pretty/beautiful"
+                    }
+                ]
+            }
+        ],
+            
+    },
+    "10. Comprehension-I’m A Little Airplane": {
+        "tick": [
+            {
+                "instruction": "Tick the correct answers.",
+                "items": [
+                    {
+                        "question": "Who is ‘I’ in the poem?<br>&emsp; a. airplane &emsp;&emsp; b. sky",
+                        "answer": "a"
+                    },
+                    {
+                        "question": "Can the little airplane fly?<br>&emsp; a. Yes &emsp;&emsp; b. No",
+                        "answer": "a"
+                    }
+                ]
+            }
+        ],
     },
     "11. Composition": {
         "fillblanks": [
@@ -1431,6 +1461,15 @@ const questions = {
                     {
                         "blank": "FIVE LITTLE DUCKS<br>Five little ducks went out one day<br>Over the hill and far away<br>Mother Duck said, “Quack, quack, quack,”<br>But only four little ducks came back<br>One, two, __________, four<br>Four little ducks went out one day<br>Over the hill and far away<br>Mother Duck said, “ __________ ”<br>But only three little ducks __________<br>One, two, __________<br>Three little ...<br>Two little ...<br>One little duck went out one day<br>Over the hill and far away<br>__________ said, “Quack, quack, quack,”<br>But none of the five little ducks came back<br>Sad Mother Duck went out one day<br>Over the hill and far away<br>Mother Duck said, “Quack, quack, quack,”<br>And all the __________ came back.",
                         "answer": "three,  quack, quack, quack, came back, Mother duck, five little ducks"
+                    }
+                ]
+            },
+            {
+                "instruction": "Complete the story in your own words.<br><img src='img/ch-11-1.png'>",
+                "items": [
+                    {
+                        "blank": "One day a cap-seller was walking through a forest. He felt tired and wanted to __________. He __________ under a tree, and __________.<br>There were four monkeys on the __________. They jumped __________and wore __________. Then, they __________.<br>When the cap-seller woke up, he was __________. He looked around. He could not __________. Then, he looked __________. He saw __________.<br>He thought of a plan.",
+                        "answer": "Do it yourself"
                     }
                 ]
             }
