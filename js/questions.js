@@ -1322,7 +1322,7 @@ const questions = {
         ],
             
     },
-    "10. Comprehension-Please, Thank You And Pardon Me": {
+    "11. Comprehension-Please, Thank You And Pardon Me": {
         "fillblanks": [
             {
                 "instruction": "Fill in the blanks with the correct words.",
@@ -1372,7 +1372,7 @@ const questions = {
         ],
             
     },
-    "10. Comprehension-Blue Fairy’s Birthday Party": {
+    "12. Comprehension-Blue Fairy’s Birthday Party": {
         "truefalse": [
             {
                 "instruction": "Write T for true or F for false.",
@@ -1436,7 +1436,7 @@ const questions = {
         ],
             
     },
-    "10. Comprehension-I’m A Little Airplane": {
+    "13. Comprehension-I’m A Little Airplane": {
         "tick": [
             {
                 "instruction": "Tick the correct answers.",
@@ -1453,7 +1453,7 @@ const questions = {
             }
         ],
     },
-    "11. Composition": {
+    "14. Composition": {
         "fillblanks": [
             {
                 "instruction": "Complete the poem with the words given in the box.",
